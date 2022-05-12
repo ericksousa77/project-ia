@@ -9,7 +9,7 @@ import constraint.MaxWorkTime;
 import constraint.Preferences;
 import constraint.TwoPersonsInSameRoom;
 
-
+//acho que isso tem que receber um array de 
 public class PersonToSchedule extends CSP<Person, String>{
     public ArrayList<String> dayAvailableHours = new ArrayList<String>();
     
@@ -20,6 +20,7 @@ public class PersonToSchedule extends CSP<Person, String>{
     public PersonToSchedule(List<Person> persons) throws IOException {
         super();
         this.officePersons = persons;
+        //lembrar de substituir esse 25 por uma variável
         for(int i = 1; i < 25; i++) {
         	this.dayAvailableHours.add(""+i);
         }
@@ -45,7 +46,7 @@ public class PersonToSchedule extends CSP<Person, String>{
     
         for(int i=0; i<employees.size(); i++){
         	addConstraint(new MaxWorkTime(employees.get(i)));
-            addConstraint(new Preferences(employees.get(i))); //implementar
+            addConstraint(new Preferences(employees.get(i)));
             for(int j=0; j<employees.size(); j++){
                 if(!employees.get(i).getName().equals(employees.get(j).getName())){
                     addConstraint(new TwoPersonsInSameRoom(employees.get(i), employees.get(j)));     

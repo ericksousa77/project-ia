@@ -36,12 +36,13 @@ public class MaxWorkTime implements Constraint<Person, String> {
         
         currentWorkTime = person.currentSchedule.size()+1; 
        
-        if(currentWorkTime>maxWorkTime)
+        if(currentWorkTime>maxWorkTime) {
             return false;
-        else{
-            this.person.getCurrentSchedule().add(assigned);
-            return true;
-        }               
+        }
+        
+        this.person.getCurrentSchedule().add(assigned);
+        return true;
+                     
        
        
              

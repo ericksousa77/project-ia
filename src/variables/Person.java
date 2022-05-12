@@ -18,12 +18,24 @@ public class Person extends Variable {
 
     public Person(String name, String personName, Boolean isVacinated, int workTime,
 			ArrayList<String> schedulePreferences, ArrayList<String> currentSchedule) {
+    	//esse super aqui ? esse atributo name ? 
 		super(name);
 		this.personName = personName;
 		this.isVacinated = isVacinated;
 		this.workTime = workTime;
 		this.schedulePreferences = schedulePreferences;
 		this.currentSchedule = currentSchedule;
+	}
+    
+    //construtor sem a currentSchedule
+    public Person(String name, String personName, Boolean isVacinated, int workTime,
+			ArrayList<String> schedulePreferences) {
+    	//esse super aqui ? esse atributo name ? 
+		super(name);
+		this.personName = personName;
+		this.isVacinated = isVacinated;
+		this.workTime = workTime;
+		this.schedulePreferences = schedulePreferences;
 	}
   
     public String getPersonName() {
