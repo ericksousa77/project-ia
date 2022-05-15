@@ -16,10 +16,10 @@ public class Person extends Variable {
     public ArrayList<String> schedulePreferences; 
     public ArrayList<String> currentSchedule;
 
-    public Person(String name, String personName, Boolean isVacinated, int workTime,
+    public Person(String personName, Boolean isVacinated, int workTime,
 			ArrayList<String> schedulePreferences, ArrayList<String> currentSchedule) {
     	//esse super aqui ? esse atributo name ? 
-		super(name);
+		super(personName);
 		this.personName = personName;
 		this.isVacinated = isVacinated;
 		this.workTime = workTime;
@@ -28,15 +28,15 @@ public class Person extends Variable {
 	}
     
     //construtor sem a currentSchedule
-    public Person(String name, String personName, Boolean isVacinated, int workTime,
-			ArrayList<String> schedulePreferences) {
-    	//esse super aqui ? esse atributo name ? 
-		super(name);
-		this.personName = personName;
-		this.isVacinated = isVacinated;
-		this.workTime = workTime;
-		this.schedulePreferences = schedulePreferences;
-	}
+//    public Person(String personName, Boolean isVacinated, int workTime,
+//			ArrayList<String> schedulePreferences) {
+//    	//esse super aqui ? esse atributo name ? 
+//		super(personName);
+//		this.personName = personName;
+//		this.isVacinated = isVacinated;
+//		this.workTime = workTime;
+//		this.schedulePreferences = schedulePreferences;
+//	}
   
     public String getPersonName() {
 		return personName;

@@ -1,8 +1,11 @@
 package main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import aima.Assignment;
 import aima.FlexibleBacktrackingSolver;
@@ -14,18 +17,21 @@ public class OfficeScheduling {
 	
 	//aqui ta arraylist e no csp ta recebendo uma list, pode ? 
 	private static  ArrayList<Person> employees = new ArrayList<Person>();
+	private static ArrayList<String> dayAvailableHours = new ArrayList<String>();
+	
+	
 
 	public static void main(String[] args) {
 		
 		 
-		
-		
-	
+
 		
 		//o looping dura até todos as pessoas tiverem alocadas com seu tempo de trabalho
 		
-		
-//		while(true) {
+		for(int l = 1; l < 25; l++) {
+        	dayAvailableHours.add(""+l);
+        }
+
 			
 		int amountOfPersons = 0;
 		String personName = "";
@@ -34,6 +40,7 @@ public class OfficeScheduling {
 		//qual a maneira correta de inializar esse cara ? 
 	    
 	    ArrayList<String> schedulePreferences = new ArrayList<String>();
+	    ArrayList<String> currentSchedule = new ArrayList<String>();
 	    
 	    String isVacinatedInput;
 		
@@ -51,9 +58,10 @@ public class OfficeScheduling {
 			
 			
 			//atenção aqui
-			for (int j = 0; j < schedulePreferences.size(); j++) {
-				schedulePreferences.remove(j);
-			}
+//			for (int j = 0; j < schedulePreferences.size(); j++) {
+//				schedulePreferences.remove(j);
+//			}
+			schedulePreferences = new ArrayList<String>();
 			
 			System.out.println("passou");
 			
@@ -103,7 +111,12 @@ public class OfficeScheduling {
 			
 			
 			
-			Person person = new Person("fakeName", personName,isVacinated, workTime, schedulePreferences);
+			Person person = new Person(personName,isVacinated, workTime, schedulePreferences, currentSchedule);
+			
+			for(int m = 0; m < person.getSchedulePreferences().size(); m++ ){
+				System.out.println(person.getSchedulePreferences().get(m));
+			}
+			
 			
 		    employees.add(person);
 		    limpaConsole();
@@ -111,17 +124,60 @@ public class OfficeScheduling {
 			
 		}
 		
-//		PersonToSchedule csp = null;
-//		FlexibleBacktrackingSolver strategy = new FlexibleBacktrackingSolver<Person, String>();
-//        Assignment<Person, String> result = null;
-//        Optional<Assignment<Person, String>> solution; 
 		
+		
+		PersonToSchedule csp = null;
+		System.out.println("passou1");
+		FlexibleBacktrackingSolver strategy = new FlexibleBacktrackingSolver<Person, String>();
+		System.out.println("passou2");
+        Assignment<Person, String> result = null;
+        Optional<Assignment<Person, String>> solution; 
+        
+        System.out.println("passou3");
+		
+        boolean notAvailableAllocations = dayAvailableHours.isEmpty();
+        
+		while(!notAvailableAllocations) {
+			
+			try {
+                csp = new PersonToSchedule(employees);
+            } catch(IOException ex) {
+                Logger.getLogger(OfficeScheduling.class.getName()).log(Level.SEVERE, null, ex);
+            }
+			
+			System.out.println("passou20");
+			
+			//Gera a solução
+            solution = strategy.solve(csp);
+            
+            System.out.println("passou21");
+            
+            try{
+                result = solution.get();                
+            }catch(java.util.NoSuchElementException e){                
+                System.out.println("Não foi possível alocar");
+                break;                
+            }  
+            
+        
+            for(int i=0; i<employees.size(); i++){
+                String hourOfDay = result.getValue(result.getVariables().get(i));         
+                employees.get(i).currentSchedule.add(hourOfDay);
+                
+//                de alguma forma tenho que remover a hora atribuida das 24hrs do dia
+//                removo do dominio?
+                for(int j = 0; j < dayAvailableHours.size(); j++){
+                    if(hourOfDay.equals(dayAvailableHours.get(j))){
+                    	dayAvailableHours.remove(j);
+                        j--;
+                    }
+                }
+            }
+             			
+		}
 			
 			
-			
-			
-			
-//		}
+
 		
 
 	}

@@ -25,23 +25,31 @@ public class PersonToSchedule extends CSP<Person, String>{
         	this.dayAvailableHours.add(""+i);
         }
        
-        
-        
+        System.out.println("passou5");
         //adição das variáveis ao problema
         for(int i = 0; i<officePersons.size();i++){
+        	System.out.println(officePersons.get(i));
             this.addVariable(officePersons.get(i));            
         }
+        
+        System.out.println("passou6");
        
         //criação do domínio
         Domain<String> availableHoursDomain = new Domain<>(dayAvailableHours);
+        
+        System.out.println("passou8");
         
         //definição do domínio para cada variável
         for (Person person : getVariables())
             setDomain(person, availableHoursDomain); 
         
+        System.out.println("passou9");
+        
         //persons
         List<Person> employees;
         employees = getVariables();        
+        
+        System.out.println("passou10");
         
     
         for(int i=0; i<employees.size(); i++){
@@ -54,6 +62,7 @@ public class PersonToSchedule extends CSP<Person, String>{
                 }
             }
         }
+        System.out.println("passou11");
         
     }
  

@@ -29,11 +29,24 @@ public class TwoPersonsInSameRoom implements Constraint<Person, String>{
 
     @Override
     public boolean isSatisfiedWith(Assignment<Person, String> assignment) {
+    	System.out.println("passou40");
+    	//firstPersonAssigned ta recebendo null
         String firstPersonAssigned = assignment.getValue(this.firstPerson);   
         String secondPersonAssigned = assignment.getValue(this.secondPerson); 
         
+        System.out.println("passou41");
+        
+        System.out.println(firstPersonAssigned);
+        
+        System.out.println(secondPersonAssigned);
+        
+        System.out.println(this.firstPerson.getIsVacinated());
+        
+        System.out.println(this.secondPerson.getIsVacinated());
+        
         boolean verify = !firstPersonAssigned.equals(secondPersonAssigned) || (this.firstPerson.getIsVacinated() && this.secondPerson.getIsVacinated());
         
+        System.out.println("passou42");
         return verify;
     
     }
