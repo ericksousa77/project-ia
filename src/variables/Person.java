@@ -15,7 +15,9 @@ public class Person extends Variable {
     public int workTime;
     public ArrayList<String> schedulePreferences; 
     public ArrayList<String> currentSchedule;
+    public int currentWorkTime;
 
+    
     public Person(String personName, Boolean isVacinated, int workTime,
 			ArrayList<String> schedulePreferences, ArrayList<String> currentSchedule) {
     	//esse super aqui ? esse atributo name ? 
@@ -25,6 +27,8 @@ public class Person extends Variable {
 		this.workTime = workTime;
 		this.schedulePreferences = schedulePreferences;
 		this.currentSchedule = currentSchedule;
+		this.currentWorkTime = 0;
+		this.schedulePreferences.add("to_be_defined_"+this.personName);
 	}
     
     //construtor sem a currentSchedule
@@ -57,9 +61,18 @@ public class Person extends Variable {
 	public int getWorkTime() {
 		return workTime;
 	}
+	
+	public int getCurrentWorkTime() {
+		return currentWorkTime;
+	}
+
 
 	public void setWorkTime(int workTime) {
 		this.workTime = workTime;
+	}
+	
+	public void setCurrentWorkTime(int currentWorkTime) {
+		this.currentWorkTime = currentWorkTime;
 	}
 
 	public ArrayList<String> getSchedulePreferences() {
@@ -80,7 +93,7 @@ public class Person extends Variable {
     
 	@Override
     public String toString() {
-        return "Person{" + "name =" + personName + ", work time =" + workTime + ", schedule preference =" + schedulePreferences+ ", is vacinated =" + isVacinated + ", current schedule =" + currentSchedule +'}';
+        return "Person{" + "name =" + personName + ", work time =" + workTime + ", schedule preference =" + schedulePreferences+ ", is vacinated =" + isVacinated + ", current schedule =" + currentSchedule + ", current work time =" + currentWorkTime + '}';
     }
 	
 	

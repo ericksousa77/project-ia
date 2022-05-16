@@ -1,10 +1,3 @@
-
-//chegar se o assignment ja existe na current scheduling 
-	
-//	return this.person.getSchedulePreferences().constains(assigned);
-
-
-
 package constraint;
 
 import java.util.ArrayList;
@@ -14,6 +7,9 @@ import aima.Assignment;
 import aima.Constraint;
 
 public class Preferences implements Constraint<Person, String> {
+	//chegar se o assignment ja existe na current scheduling 
+	
+	//	return this.person.getSchedulePreferences().constains(assigned);
 
     private Person person;
     private List<Person> scope;
@@ -37,18 +33,28 @@ public class Preferences implements Constraint<Person, String> {
         ArrayList<String> preferences = this.person.getSchedulePreferences();                
         
         boolean isPreference = false; 
+        System.out.println("Preferences");
+        
+        System.out.println(assigned);
+        
+      
         
         isPreference = preferences.contains(assigned);
         
-        if(isPreference) {
-        	return true;
-        }
+        System.out.println(this.person);
+//        
+        System.out.println(isPreference);
+        
+        
         //acho que aqui realmente é o person name, que seria a pessoa que faltou horário para ela
-        if(assigned.equals("to_be_defined" + person.getName())) {
+        if(assigned.equals("to_be_defined_" + person.getName())) {
+//          System.out.println("caiu no to be defined");
+          System.out.println("true constraint - preferences");
           return true;
         }
         
-        return false;
+        System.out.println(isPreference+"constraint - preferences");
+        return isPreference;
            
     }   
     
