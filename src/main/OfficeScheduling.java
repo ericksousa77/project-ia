@@ -2,6 +2,10 @@ package main;
 
 import java.io.IOException;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
@@ -24,58 +28,53 @@ public class OfficeScheduling {
 	
 	private static  ArrayList<Person> employees = new ArrayList<Person>();
 	
-	
-	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		
 		 	
 		//o looping dura até todos as pessoas tiverem alocadas com seu tempo de trabalho
-		
-	
 			
 		int amountOfPersons = 0;
 		String personName = "";
 		boolean isVacinated = false;
 		int workTime = 0;
 		int amountOfPreferences = 0;
-		//qual a maneira correta de inializar esse cara ? 
 	    
 	    ArrayList<String> schedulePreferences = new ArrayList<String>();
 	    ArrayList<String> currentSchedule = new ArrayList<String>();
 	    
 	    String isVacinatedInput;
+	    
+	    Scanner in = new Scanner(new FileReader("employees.txt"));
+
 		
-		
-		Scanner input = new Scanner(System.in);
-		System.out.println("Digite a quantidade de pessoas que trabalham na empresa: "); 
-		amountOfPersons = Integer.parseInt(input.nextLine());
-		
-		
-		for (int i = 0; i < amountOfPersons; i++) {
+		while (in.hasNextLine()) {
+			
+			 String line = in.nextLine();
+			 if(line.isEmpty()) {
+				 break;
+			 }
+			 String lineSplited [] = line.split(",");
+			 
+			
 			personName = "";
 			isVacinated = false;
 			workTime = 0;
 			amountOfPreferences = 0;
 			
 			
-			
-			//atenção aqui
-//			for (int j = 0; j < schedulePreferences.size(); j++) {
-//				schedulePreferences.remove(j);
-//			}
 			schedulePreferences = new ArrayList<String>();
 			currentSchedule = new ArrayList<String>();
 			
-//			System.out.println("passou");
+
 			
-			System.out.println("Digite o nome da pessoa: "); 
-			personName = input.nextLine();
+//			System.out.println("Digite o nome da pessoa: "); 
+			personName = lineSplited[0];
 			
-//			System.out.println(personName);
+
 			
-			System.out.println("Essa pessoa esta vacinada ? Digite 1 para sim e 2 para não "); 
-			isVacinatedInput = input.nextLine();
+//			System.out.println("Essa pessoa esta vacinada ? Digite 1 para sim e 2 para não "); 
+			isVacinatedInput = lineSplited[1];
 			
 //			isVacinatedInput.equals("1") ? isVacinated = true : isVacinated = false;
 			
@@ -87,23 +86,21 @@ public class OfficeScheduling {
 				isVacinated = false;
 			}
 			
-//			System.out.println(isVacinated);
+
 			
-			System.out.println("Digite quantas (numero) horas por dia essa pessoa trabalha: ");
-			workTime = Integer.parseInt(input.nextLine());
-			
-//			System.out.println(workTime);
-			
-			System.out.println("Digite quantas preferencias de horario você tem: ");
-			amountOfPreferences = Integer.parseInt(input.nextLine());
+//			System.out.println("Digite quantas (numero) horas por dia essa pessoa trabalha: ");
+			workTime = Integer.parseInt(lineSplited[2]);
 			
 			
-			System.out.println("Digite a preferencia de horário em formato 24 horas: ");
+//			System.out.println("Digite quantas preferencias de horario você tem: ");
+			amountOfPreferences = Integer.parseInt(lineSplited[3]);
+			
+			
+//			System.out.println("Digite a preferencia de horário em formato 24 horas: ");
 			String currentPreference = "";
 			for (int k = 0; k < amountOfPreferences; k++) {
-				if(k>0)
-					System.out.println("Digite proxima preferencia de horário: ");
-				currentPreference = input.nextLine();
+
+				currentPreference = lineSplited[k+4];
 //				System.out.println(currentPreference);
 				try {
 					schedulePreferences.add(currentPreference);
@@ -113,25 +110,21 @@ public class OfficeScheduling {
 				}
 			
 			}
-			
-			System.out.println("OK! Todas as preferencias já foram digitadas");
-			
-			
-			
+				
 			Person person = new Person(personName,isVacinated, workTime, schedulePreferences, currentSchedule);
 			
+			System.out.println(person);
 //			for(int m = 0; m < person.getSchedulePreferences().size(); m++ ){
 //				System.out.println(person.getSchedulePreferences().get(m));
 //			}
 			
 			
 		    employees.add(person);
-		    limpaConsole();
+//		    limpaConsole();
 			
 			
 		}
-		
-		
+
 		
 		PersonToSchedule csp = null;
 		
@@ -176,12 +169,6 @@ public class OfficeScheduling {
         
 		while(true) {
 			
-//			for (int g = 0; g < employees.size(); g++) {
-//				dayAvailableHours.add("to_be_defined_"+employees.get(g).getPersonName());
-//			}
-			
-			
-			
 			System.out.println("merdaaaa");
 			System.out.println(employees);
 			System.out.println(noDuplicateDayAvailableHours);
@@ -192,16 +179,11 @@ public class OfficeScheduling {
                 Logger.getLogger(OfficeScheduling.class.getName()).log(Level.SEVERE, null, ex);
             }
 			
-//			System.out.println("passou20");
-			
+
 			//Gera a solução
             solution = strategy.solve(csp);
             
-            
-            
-            
-            
-//            System.out.println("passou21");
+   
             
             try{
                 result = solution.get();                
@@ -209,9 +191,7 @@ public class OfficeScheduling {
                 System.out.println("Não foi possível alocar");
                 break;                
             }  
-//            System.out.println("pritnando or result");
-//            System.out.println(result.getValue(employees.get(0)));
-            
+           
             //checa se todo mundo ja bateu seu limite de horas
             boolean checkWorkTime = true;
             for(int i=0; i<employees.size(); i++){
@@ -259,13 +239,9 @@ public class OfficeScheduling {
             
              			
 		}
-		
+		System.out.println("**SOLUÇÃO FINAL**");
 		System.out.println(employees);
-		
-			
-			
-
-		
+	
 
 	}
 	
