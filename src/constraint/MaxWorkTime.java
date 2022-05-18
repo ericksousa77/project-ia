@@ -34,28 +34,15 @@ public class MaxWorkTime implements Constraint<Person, String> {
         int maxWorkTime = this.person.getWorkTime();
         int currentWorkTime = this.person.getCurrentWorkTime();
         
-        System.out.println("Max Work Time");
-        
-//        System.out.println(assigned);
- 
-        
-//        System.out.println(this.person);
-        
-
-       
         if(currentWorkTime+1 > maxWorkTime) {
-//        	System.out.println("passou37");
         	if(assigned.equals("to_be_defined_" + person.getName())) {
         		return true;
         	}
-        	
-        	System.out.println("false - constraint Max work");
+
             return false;
         }
         
        this.person.setCurrentWorkTime(currentWorkTime+1);
-        
-       System.out.println("true - constraint Max work");
        return true;
                      
        

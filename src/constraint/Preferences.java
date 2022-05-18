@@ -33,27 +33,13 @@ public class Preferences implements Constraint<Person, String> {
         ArrayList<String> preferences = this.person.getSchedulePreferences();                
         
         boolean isPreference = false; 
-        System.out.println("Preferences");
         
-        System.out.println(assigned);
+        isPreference = preferences.contains(assigned);    
         
-      
-        
-        isPreference = preferences.contains(assigned);
-        
-        System.out.println(this.person);
-//        
-        System.out.println(isPreference);
-        
-        
-        //acho que aqui realmente é o person name, que seria a pessoa que faltou horário para ela
         if(assigned.equals("to_be_defined_" + person.getName())) {
-//          System.out.println("caiu no to be defined");
-          System.out.println("true constraint - preferences");
           return true;
         }
-        
-        System.out.println(isPreference+"constraint - preferences");
+
         return isPreference;
            
     }   

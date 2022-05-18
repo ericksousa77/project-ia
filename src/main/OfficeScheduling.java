@@ -41,7 +41,9 @@ public class OfficeScheduling {
 		int amountOfPreferences = 0;
 	    
 	    ArrayList<String> schedulePreferences = new ArrayList<String>();
+	    ArrayList<Integer> schedulePreferencesTemp = new ArrayList<Integer>();
 	    ArrayList<String> currentSchedule = new ArrayList<String>();
+	    
 	    
 	    String isVacinatedInput;
 	    
@@ -64,19 +66,14 @@ public class OfficeScheduling {
 			
 			
 			schedulePreferences = new ArrayList<String>();
+			schedulePreferencesTemp = new ArrayList<Integer>();
 			currentSchedule = new ArrayList<String>();
 			
-
-			
-//			System.out.println("Digite o nome da pessoa: "); 
+	
 			personName = lineSplited[0];
 			
-
-			
-//			System.out.println("Essa pessoa esta vacinada ? Digite 1 para sim e 2 para não "); 
 			isVacinatedInput = lineSplited[1];
 			
-//			isVacinatedInput.equals("1") ? isVacinated = true : isVacinated = false;
 			
 			if (isVacinatedInput.equals("1")) {
 				isVacinated = true;
@@ -86,75 +83,49 @@ public class OfficeScheduling {
 				isVacinated = false;
 			}
 			
-
-			
-//			System.out.println("Digite quantas (numero) horas por dia essa pessoa trabalha: ");
+		
 			workTime = Integer.parseInt(lineSplited[2]);
 			
-			
-//			System.out.println("Digite quantas preferencias de horario você tem: ");
 			amountOfPreferences = Integer.parseInt(lineSplited[3]);
 			
-			
-//			System.out.println("Digite a preferencia de horário em formato 24 horas: ");
-			String currentPreference = "";
+			Integer currentPreference = -1;
 			for (int k = 0; k < amountOfPreferences; k++) {
 
-				currentPreference = lineSplited[k+4];
-//				System.out.println(currentPreference);
+				currentPreference = Integer.parseInt(lineSplited[k+4]);
 				try {
-					schedulePreferences.add(currentPreference);
+					schedulePreferencesTemp.add(currentPreference);
 				}
 				catch(Exception e) {
 					System.out.println(e);
 				}
 			
 			}
+			
+			schedulePreferencesTemp.sort(null);
+			
+			for (Integer i : schedulePreferencesTemp) {
+				schedulePreferences.add(i.toString());
+			}
 				
 			Person person = new Person(personName,isVacinated, workTime, schedulePreferences, currentSchedule);
-			
-			System.out.println(person);
-//			for(int m = 0; m < person.getSchedulePreferences().size(); m++ ){
-//				System.out.println(person.getSchedulePreferences().get(m));
-//			}
-			
-			
+						
 		    employees.add(person);
-//		    limpaConsole();
+
 			
 			
 		}
 
 		
 		PersonToSchedule csp = null;
-		
-		System.out.println("passou1");
-		
-//		BackjumpingBacktrackingSolver strategy = new BackjumpingBacktrackingSolver<Person, String>();
+				
 		FlexibleBacktrackingSolver strategy = new FlexibleBacktrackingSolver<Person, String>();
-//        FlexibleBacktrackingSolver strategy = new FlexibleBacktrackingSolver<Person, String>().set(CspHeuristics.mrv()).set(new AC3Strategy<>());
-		
-		
-		System.out.println("passou2");
-		
+	
         Assignment<Person, String> result = null;
         
         Optional<Assignment<Person, String>> solution; 
-        
-        System.out.println("passou3");
-		
-        
-        
+    
         ArrayList<String> dayAvailableHours = new ArrayList<String>();
-        
-        //começar com o dominio máximo (24 horas) e depois vai diminuindo a medida que as pessoas vao sendo alocadas
-//        for(int i = 1; i < 25; i++) {
-//        	dayAvailableHours.add(""+i);
-//        }
-        
-        //tratar para quando duas pessoas colocarem a mesma horas como preferencia
-        
-        
+           
         for (int g = 0; g < employees.size(); g++) {
         	for (int h = 0; h<employees.get(g).getSchedulePreferences().size(); h++) {
         		dayAvailableHours.add(employees.get(g).getSchedulePreferences().get(h));
@@ -163,15 +134,8 @@ public class OfficeScheduling {
 		}
         
         ArrayList<String> noDuplicateDayAvailableHours = new ArrayList<String>(new HashSet<>(dayAvailableHours));
-        
-        
-      
-        
+
 		while(true) {
-			
-			System.out.println("merdaaaa");
-			System.out.println(employees);
-			System.out.println(noDuplicateDayAvailableHours);
 			
 			try {
                 csp = new PersonToSchedule(employees, noDuplicateDayAvailableHours);
@@ -197,7 +161,6 @@ public class OfficeScheduling {
             for(int i=0; i<employees.size(); i++){
             	
                 String hourOfDay = result.getValue(result.getVariables().get(i));
-                System.out.println("testando");
                 
                 if(hourOfDay.charAt(0) != 't') {
 
@@ -214,12 +177,8 @@ public class OfficeScheduling {
                 
                 
             }
-                      
-            System.out.println(checkWorkTime);
-            System.out.println(noDuplicateDayAvailableHours.isEmpty());
+
             if(noDuplicateDayAvailableHours.isEmpty() || checkWorkTime ) {
-            	
-            	System.out.println("caiu no if do check");
 				break;
 			}
             
@@ -229,7 +188,6 @@ public class OfficeScheduling {
             boolean a=true; 
             for(int i=0; i<result.getVariables().size(); i++){               
                 String personAux = result.getValue(result.getVariables().get(i));
-                //mudar o t para liberar pessoas com o a primeira letra t
                 if(personAux.charAt(0)!='t')
                     a=false; 
             }
@@ -240,15 +198,36 @@ public class OfficeScheduling {
              			
 		}
 		System.out.println("**SOLUÇÃO FINAL**");
-		System.out.println(employees);
 	
-
-	}
-	
-	static void limpaConsole(){
-		for(int i=0;i<1000;i++) {
-			System.out.println();
+		for (Integer d = 1; d<=24; d++) {
+			if(d <=12) {
+				for (Person employee : employees) {
+					for(Integer k = 0; k < employee.getCurrentSchedule().size(); k++){
+						if (employee.getCurrentSchedule().get(k).equals(d.toString())) {
+							System.out.printf("%s AM - %s\n",d, employee.getPersonName());
+						}
+						
+					}
+				}
+				
+			}
+			
+			if(d > 12) {
+				for (Person employee : employees) {
+					for(Integer k = 0; k < employee.getCurrentSchedule().size(); k++){
+						if (employee.getCurrentSchedule().get(k).equals(d.toString())) {
+							System.out.printf("%s PM - %s\n",d-12, employee.getPersonName());
+						}
+						
+					}
+				}
+			}
+			
+			
+			
+			
 		}
-	}
 
+	}
+	
 }
