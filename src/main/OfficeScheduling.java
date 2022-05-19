@@ -21,6 +21,8 @@ import csp.PersonToSchedule;
 import aima.CspHeuristics;
 import aima.AC3Strategy;
 
+import aima.AbstractBacktrackingSolver;
+
 import variables.Person;
 
 public class OfficeScheduling {
@@ -31,8 +33,6 @@ public class OfficeScheduling {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		 	
-		//o looping dura até todos as pessoas tiverem alocadas com seu tempo de trabalho
 			
 		int amountOfPersons = 0;
 		String personName = "";
@@ -119,26 +119,16 @@ public class OfficeScheduling {
 		PersonToSchedule csp = null;
 				
 		FlexibleBacktrackingSolver strategy = new FlexibleBacktrackingSolver<Person, String>();
-	
+		
         Assignment<Person, String> result = null;
         
         Optional<Assignment<Person, String>> solution; 
-    
-        ArrayList<String> dayAvailableHours = new ArrayList<String>();
-           
-        for (int g = 0; g < employees.size(); g++) {
-        	for (int h = 0; h<employees.get(g).getSchedulePreferences().size(); h++) {
-        		dayAvailableHours.add(employees.get(g).getSchedulePreferences().get(h));
-        	}
-			
-		}
-        
-        ArrayList<String> noDuplicateDayAvailableHours = new ArrayList<String>(new HashSet<>(dayAvailableHours));
+       
 
 		while(true) {
 			
 			try {
-                csp = new PersonToSchedule(employees, noDuplicateDayAvailableHours);
+                csp = new PersonToSchedule(employees);
             } catch(IOException ex) {
                 Logger.getLogger(OfficeScheduling.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -146,9 +136,7 @@ public class OfficeScheduling {
 
 			//Gera a solução
             solution = strategy.solve(csp);
-            
-   
-            
+
             try{
                 result = solution.get();                
             }catch(java.util.NoSuchElementException e){                
@@ -167,7 +155,6 @@ public class OfficeScheduling {
 	                employees.get(i).getCurrentSchedule().add(result.getValue(employees.get(i)));
 	                employees.get(i).setCurrentWorkTime(employees.get(i).getCurrentSchedule().size());
 	
-	                noDuplicateDayAvailableHours.remove(hourOfDay);
                 }
                 
                 
@@ -178,7 +165,7 @@ public class OfficeScheduling {
                 
             }
 
-            if(noDuplicateDayAvailableHours.isEmpty() || checkWorkTime ) {
+            if(checkWorkTime) {
 				break;
 			}
             
@@ -197,14 +184,17 @@ public class OfficeScheduling {
             
              			
 		}
-		System.out.println("**SOLUÇÃO FINAL**");
+		System.out.println("**SOLUÇÃO FINAL**\n");
+		System.out.println("**SÓ SÃO EXIBIDOS OS HORÁRIOS QUE POSSUEM PESSOAS ALOCADAS**\n");
+
+		System.out.println("#########################################");
 	
 		for (Integer d = 1; d<=24; d++) {
 			if(d <=12) {
 				for (Person employee : employees) {
 					for(Integer k = 0; k < employee.getCurrentSchedule().size(); k++){
 						if (employee.getCurrentSchedule().get(k).equals(d.toString())) {
-							System.out.printf("%s AM - %s\n",d, employee.getPersonName());
+							System.out.printf("# %s AM - %s\n",d, employee.getPersonName());
 						}
 						
 					}
@@ -216,18 +206,17 @@ public class OfficeScheduling {
 				for (Person employee : employees) {
 					for(Integer k = 0; k < employee.getCurrentSchedule().size(); k++){
 						if (employee.getCurrentSchedule().get(k).equals(d.toString())) {
-							System.out.printf("%s PM - %s\n",d-12, employee.getPersonName());
+							System.out.printf("# %s PM - %s\n",d-12, employee.getPersonName());
 						}
 						
 					}
 				}
 			}
-			
-			
-			
-			
+		
 		}
-
+		
+		System.out.println("#########################################");
+	
 	}
 	
 }

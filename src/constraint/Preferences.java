@@ -35,7 +35,7 @@ public class Preferences implements Constraint<Person, String> {
         boolean isPreference = false; 
         
         isPreference = preferences.contains(assigned);    
-        
+        //checagem para a questão de não disponibilidade
         if(assigned.equals("to_be_defined_" + person.getName())) {
           return true;
         }

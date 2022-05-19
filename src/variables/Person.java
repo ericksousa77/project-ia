@@ -20,7 +20,6 @@ public class Person extends Variable {
     
     public Person(String personName, Boolean isVacinated, int workTime,
 			ArrayList<String> schedulePreferences, ArrayList<String> currentSchedule) {
-    	//esse super aqui ? esse atributo name ? 
 		super(personName);
 		this.personName = personName;
 		this.isVacinated = isVacinated;
