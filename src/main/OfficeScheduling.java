@@ -151,8 +151,8 @@ public class OfficeScheduling {
                 String hourOfDay = result.getValue(result.getVariables().get(i));
                 
                 if(hourOfDay.charAt(0) != 't') {
-
-	                employees.get(i).getCurrentSchedule().add(result.getValue(employees.get(i)));
+               	    employees.get(i).getCurrentSchedule().add(hourOfDay);
+//	                employees.get(i).getCurrentSchedule().add(result.getValue(employees.get(i)));
 	                employees.get(i).setCurrentWorkTime(employees.get(i).getCurrentSchedule().size());
 	
                 }
@@ -170,7 +170,7 @@ public class OfficeScheduling {
 			}
             
             
-            //condição de parada
+            //condição de parada dos coringas
             
             boolean a=true; 
             for(int i=0; i<result.getVariables().size(); i++){               
@@ -187,14 +187,14 @@ public class OfficeScheduling {
 		System.out.println("**SOLUÇÃO FINAL**\n");
 		System.out.println("**SÓ SÃO EXIBIDOS OS HORÁRIOS QUE POSSUEM PESSOAS ALOCADAS**\n");
 
-		System.out.println("#########################################");
+		System.out.println("##################################################################################\n");
 	
 		for (Integer d = 1; d<=24; d++) {
 			if(d <=12) {
 				for (Person employee : employees) {
 					for(Integer k = 0; k < employee.getCurrentSchedule().size(); k++){
 						if (employee.getCurrentSchedule().get(k).equals(d.toString())) {
-							System.out.printf("# %s AM - %s\n",d, employee.getPersonName());
+							System.out.printf("# %s AM - %s\n",d,employee.getPersonName());
 						}
 						
 					}
@@ -206,7 +206,7 @@ public class OfficeScheduling {
 				for (Person employee : employees) {
 					for(Integer k = 0; k < employee.getCurrentSchedule().size(); k++){
 						if (employee.getCurrentSchedule().get(k).equals(d.toString())) {
-							System.out.printf("# %s PM - %s\n",d-12, employee.getPersonName());
+							System.out.printf("# %s PM - %s\n",d-12,employee.getPersonName());
 						}
 						
 					}
@@ -215,7 +215,28 @@ public class OfficeScheduling {
 		
 		}
 		
-		System.out.println("#########################################");
+		System.out.println("\n##################################################################################\n\n");
+		
+		System.out.println("Lista das pessoas que nao estao trabalhando a sua quantidade de horas obrigatoria\npor falta de horário disponível devido as suas respectivas disponibilidades:");
+		
+		boolean employeeNotWorkMax;
+		boolean allPersonsIsWorkMax = true;
+		
+		for (Person employee : employees) {
+			
+			employeeNotWorkMax = employee.getCurrentWorkTime() < employee.getWorkTime();
+			if (employeeNotWorkMax) {
+				allPersonsIsWorkMax = false;
+				System.out.printf("\n- %s nao conseguiu alocar %d hora(s)\n\n",employee.getName(), employee.getWorkTime()-employee.getCurrentWorkTime());
+			}	
+		
+		}
+		
+		if(allPersonsIsWorkMax) {
+			System.out.println("Todas as pessoas estão trabalhando a sua quantidade obrigatória de horas");
+		}
+		
+		System.out.println("##################################################################################\n");
 	
 	}
 	

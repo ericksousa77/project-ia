@@ -42,7 +42,7 @@ public class MaxWorkTime implements Constraint<Person, String> {
             return false;
         }
         
-       this.person.setCurrentWorkTime(currentWorkTime+1);
+
        return true;
                      
        

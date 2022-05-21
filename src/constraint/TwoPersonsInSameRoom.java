@@ -1,4 +1,3 @@
-
 package constraint;
 
 import java.util.ArrayList;
@@ -10,13 +9,18 @@ import aima.Constraint;
 
 public class TwoPersonsInSameRoom implements Constraint<Person, String>{
 
-    private Person person;
+    private ArrayList<Person> employees;
     private List<Person> scope;
 
-    public TwoPersonsInSameRoom(Person person) {
-            this.person = person;
-            scope = new ArrayList<>(2);
-            scope.add(person);
+    public TwoPersonsInSameRoom(ArrayList<Person> employees) {
+            this.employees = employees;
+            
+            //os escopos são todas as variaveis envolvidas na constratint
+            scope = new ArrayList<>();
+            for(Person employee : employees) {
+            	scope.add(employee);
+            }
+            
 
     }
 
@@ -28,19 +32,27 @@ public class TwoPersonsInSameRoom implements Constraint<Person, String>{
     @Override
     public boolean isSatisfiedWith(Assignment<Person, String> assignment) {
     	
-        String personAssigned = assignment.getValue(this.person);  
-        
-        for (int i = 0; i < assignment.getVariables().size(); i++) {
-        	
-        	// esses dois primeiros ifs fazem a checagem para o assignment atual, verficando se mais alguem tem
-        	//exceto para a mesma pessoa
-        	// nenhuma pessoa pode ter a atribuição que outra pessoa ja teve
-        	//a pessoa nao pode receber uma atribuição que essa ja recebeu
-        	if((!this.person.equals(assignment.getVariables().get(i)) && assignment.getValue(assignment.getVariables().get(i)).equals(personAssigned)) || assignment.getVariables().get(i).getCurrentSchedule().contains(personAssigned)) {
-        		return false;
-        	}
-        }
-        return true;
+    	for (Person employee : assignment.getVariables()) {
+		
+    		for (Person employee2 : assignment.getVariables()) {
+//    			//checo se a atribuição gerada agora da pessoa dois esta entre as atribuições passadas da pessoa 1
+    			boolean officeIsOcuped = employee.getCurrentSchedule().contains(assignment.getValue(employee2));
+    	        
+    	        if(officeIsOcuped) {
+    	        	return false;
+    	        }
+    	        
+    	        //checo a atribuiçãoa atual da pessoa 1 com a atribuição atual da pessoa 2
+    	        officeIsOcuped = assignment.getValue(employee).equals(assignment.getValue(employee2));
+    	        
+    	        if (!employee.equals(employee2) && officeIsOcuped) {
+    	        	return false;
+    	        }
+		
+    		}
+    	}
+    	
+    	return true;
 
     }
 }

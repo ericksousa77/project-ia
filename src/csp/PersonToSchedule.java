@@ -13,11 +13,14 @@ import constraint.TwoPersonsInSameRoom;
 public class PersonToSchedule extends CSP<Person, String>{
     public ArrayList<String> dayAvailableHours = new ArrayList<String>();
 
-    public List<Person> officePersons = new ArrayList<Person>();
+    public ArrayList<Person> officePersons = new ArrayList<Person>();
 
-    public PersonToSchedule(List<Person> persons) throws IOException {
+    public PersonToSchedule(ArrayList<Person> persons) throws IOException {
         super();
         this.officePersons = persons;
+        
+//        System.out.println(officePersons.size());
+        
         
         //adição das variáveis ao problema
         for(int i = 0; i<officePersons.size();i++){
@@ -35,9 +38,10 @@ public class PersonToSchedule extends CSP<Person, String>{
 
         for(int i=0; i<employees.size(); i++){
             addConstraint(new Preferences(employees.get(i))); 
-            addConstraint(new TwoPersonsInSameRoom(employees.get(i))); 
+             
             addConstraint(new MaxWorkTime(employees.get(i)));
         }        
+        addConstraint(new TwoPersonsInSameRoom(officePersons));
         
     }
  

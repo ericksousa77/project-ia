@@ -7,9 +7,6 @@ import aima.Assignment;
 import aima.Constraint;
 
 public class Preferences implements Constraint<Person, String> {
-	//chegar se o assignment ja existe na current scheduling 
-	
-	//	return this.person.getSchedulePreferences().constains(assigned);
 
     private Person person;
     private List<Person> scope;
